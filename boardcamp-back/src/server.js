@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import CategoriesRoute from '../routes/Categories.js' 
+import GamesRoute from '../routes/Games.js'
+import CustomerRoute from '../routes/Customers.js'
 
 
 
@@ -11,6 +13,8 @@ server.use(express.json())
 
 
 server.use(CategoriesRoute)
+server.use(GamesRoute)
+server.use(CustomerRoute)
 
   
 

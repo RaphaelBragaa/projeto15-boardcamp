@@ -13,7 +13,7 @@ export async function GetCategory (req,res){
 
 export async function PostCategory(req,res){   
     const InsertCategory = req.body
-    console.log(InsertCategory)
+    
     
     const validation = CategorySchema.validate( InsertCategory,{abortEarly:true})
     if(validation.error){
@@ -33,7 +33,7 @@ export async function PostCategory(req,res){
        res.sendStatus(201)
     }catch(error){
         console.log(error)
-        res.sendStatus(500)
+       return res.sendStatus(500)
     }
     
 
