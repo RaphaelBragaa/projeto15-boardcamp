@@ -25,17 +25,30 @@ export async function PostRentals(req,res){
             return res.sendStatus(400)
         }
 
-        const searchId = connection.query('SELECT * FROM customers WHERE id = $1',[InsertRental.customerId])
-        const searchGameId = connection.query('SELECT * FROM games WHERE id = 1$',[InsertRental.gameId])
+        const searchId = await connection.query('SELECT * FROM customers WHERE id = $1',[InsertRental.customerId])
+        const searchGameId = await connection.query('SELECT * FROM games WHERE id = $1',[InsertRental.gameId])
         if(!searchId || !searchGameId){
             return res.sendStatus(400)
         }
 
-        await connection.query('INSERT INTO rentals (customerId, gameId, rentDate, daysRented, daysRented, returnDate, originalPrice, delayFee) VALUES ($1, $2, $3, $4, $5, $6, $7)'[
+       
+      
+        const originalPrice = searchGameId.pricePerDay * InsertRental.daysRented
+        
+
+        await connection.query('INSERT INTO rentals ("customerId", "gameId", "rentDate", "daysRented", "daysRented", "returnDate", "originalPrice", "delayFee") VALUES ($1, $2, $3, $4, null, $5, null)'[
             InsertRental.customerId,
             InsertRental.gameId,
+            tempo,
+            InsertRental.daysRented,
+            originalPrice
             ])
-    }catch(error){
 
+       return res.sendStatus(201)
+
+        
+    }catch(error){
+        console.log(error)
+        return res.sendStatus(500)
     }
 }
