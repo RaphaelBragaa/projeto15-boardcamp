@@ -5,16 +5,24 @@ import SchemaRentals from "../Schemas/RentalSchema.js"
 
 
 
-// export async function GetRentals(req,res){
-//     const { CustomerId, GameId} = req.query
-//     try{
-//         const params =[]
-//         const conditions = []
+ export async function GetRentals(req,res){
+    const {id} =req.params
+    console.log(id)
+    try{
+        if(id){
+             const search = await connection.query(`SELECT * FROM rentals WHERE customerId = $1`, [id])
        
-//     }catch(error){
-
-//     }
-// }
+            res.send(search.rows)
+        
+        }else{
+            const total = await connection.query(`SELECT * FROM rentals`)
+            res.send(total.rows)
+        }
+       
+    }catch(error){
+        console.log(error)
+    }
+ }
 
 export async function PostRentals(req,res){
     const InsertRental = req.body
@@ -57,4 +65,24 @@ export async function PostRentals(req,res){
         console.log(error)
         return res.sendStatus(500)
     }
+}
+
+export async function DeleteRentals(req,res){
+    const { id } = req.params
+  try {
+    const search = await connection.query(`SELECT * FROM rentals WHERE id = $1`, [id])
+    console.log(search.rows)
+    if (search.rowCount === 0) {
+      res.sendStatus(404)
+    } else {
+      const rental = search.rows[0]
+      if (!rental.returnDate) res.sendStatus(400)
+      else {
+        await connection.query(`DELETE FROM rentals WHERE id = $1`, [id])
+      }
+    }
+  } catch (error) {
+    console.log(error)
+    res.sendStatus(500)
+  }
 }

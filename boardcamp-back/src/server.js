@@ -22,6 +22,6 @@ server.use(RentalsRoute)
 
 
 
-  server.listen(4001,()=>{//MUDAR PARA PORTA 4000 NÃO ESQUEÇA !!!!
+  server.listen(4000,()=>{
     console.log('Server está rodando !')
   })
